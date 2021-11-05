@@ -1,0 +1,140 @@
+import time
+import random
+from words import words
+
+
+class Hangman:
+
+    def __init__(self):
+        self.word = random.choice(words).lower()
+        self.current_word = list(self.word)
+        self.picked_letters = []
+        self.correct_letters = []
+        self.lives = 8
+        self.length = len(self.word)
+        self.guesses = 0
+
+    def intro(self):
+        print("Welcome to Hangman by King Michael Hugh Nolan IV!")
+        time.sleep(2.5)
+        print(f'The word has {self.length} characters.')
+        time.sleep(1.35)
+
+    def winner(self):
+        print(f"Congratulations, you just won Hangman!\nAnd it only took you {self.guesses} guesses to get it.")
+        time.sleep(2)
+
+    def play(self):
+
+        self.intro()
+
+        for x in range(self.length):
+            self.correct_letters.append('_ ')
+
+        print(self.word)
+
+        while True:
+
+            if self.lives == 0:
+                print("And unfortunately that was your last life.")
+                time.sleep(1.5)
+                print(f"The word you were trying to guess was {self.word}.")
+                break
+
+            if self.correct_letters == self.current_word:
+                print(f"{self.word} is correct!")
+                time.sleep(0.5)
+                self.winner()
+                break
+
+            user_input = input("Enter a letter: ").lower()
+
+            if user_input in self.picked_letters:
+                print(f"Invalid entry, you have already guessed '{user_input}'.")
+                continue
+
+            if user_input in self.current_word:
+                self.guesses += 1
+                index_list = []
+                for x in range(self.length):
+                    if self.current_word[x] == user_input:
+                        index_list.append(x)
+
+                self.picked_letters.append(user_input)
+                for x in index_list:
+                    self.correct_letters[x] = user_input.lower()
+
+                print("Correct!")
+                for x in self.correct_letters:
+                    print(x + ' ', end='')
+            else:
+                self.picked_letters.append(user_input)
+                self.lives -= 1
+                self.guesses += 1
+                print(f"Incorrect, you have {self.lives} lives left.")
+                continue
+
+        self.ending()
+
+    def ending_play(self):
+        for x in range(self.length):
+            self.correct_letters.append('_ ')
+
+        print(self.word)
+
+        while True:
+
+            if self.lives == 0:
+                print("And unfortunately that was your last life.")
+                time.sleep(1.5)
+                print(f"The word you were trying to guess was {self.word}.")
+                break
+
+            if self.correct_letters == self.current_word:
+                print(f"{self.word} is correct!")
+                time.sleep(0.5)
+                self.winner()
+                break
+
+            user_input = input("Enter a letter: ").lower()
+
+            if user_input in self.picked_letters:
+                print(f"Invalid entry, you have already guessed '{user_input}'.")
+                continue
+
+            if user_input in self.current_word:
+                self.guesses += 1
+                index_list = []
+                for x in range(self.length):
+                    if self.current_word[x] == user_input:
+                        index_list.append(x)
+
+                self.picked_letters.append(user_input)
+                for x in index_list:
+                    self.correct_letters[x] = user_input.lower()
+
+                print("Correct!")
+                for x in self.correct_letters:
+                    print(x + ' ', end='')
+            else:
+                self.picked_letters.append(user_input)
+                self.lives -= 1
+                self.guesses += 1
+                print(f"Incorrect, you have {self.lives} lives left.")
+                continue
+
+        self.ending()
+
+    def ending(self):
+
+        play = Hangman()
+        x = input("Thanks for playing! Would you like to play again?\n")
+        if x == 'yes':
+            play.ending_play()
+        else:
+            print("Maybe another time, goodbye!")
+            quit()
+
+
+play = Hangman()
+play.play()
